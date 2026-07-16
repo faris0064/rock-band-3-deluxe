@@ -535,6 +535,7 @@
                   #ifndef HX_WII
                   DX_CURRENT_SONG_TXT_WRITER
                   DX_CURRENT_SONG_JSON_WRITER
+                  DX_LIGHTING_WRITE_TO_FILE
                   #endif
                   #endif
                   {$this mtv_formatter}

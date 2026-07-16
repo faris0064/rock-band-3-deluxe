@@ -444,6 +444,7 @@
 #include ../overshell/dx_overshell_funcs.dta
 #include ../read_write/dx_special_char_funcs.dta
 #include ../read_write/dx_read_write_funcs.dta
+#include ../read_write/dx_lighting_write.dta
 #ifndef HX_WII
 #include ../read_write/dx_presence_funcs.dta
 #include ../read_write/dx_currentsong_funcs.dta

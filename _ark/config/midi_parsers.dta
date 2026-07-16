@@ -2,6 +2,8 @@
    {do
       {set $dx_lyric_display_phrases {array 0}}
    }
+   #include ../dx/read_write/dx_lighting_write.dta
+   {set $dx_lightpreset_array {array 0}}
    {func rt_test_space
       ($before $after)
       {&& {> $mp.before_delta_sec $before} {> $mp.after_delta_sec $after}}
@@ -2220,6 +2222,7 @@
                               {elem $presets 0}
                               {beat_to_seconds $mp.start}
                            }
+                           {dx_update_lightpreset {elem $presets 0} $mp.start}
                         }
                      }
                   }
@@ -2267,11 +2270,18 @@
                      {set $mp.start {max 5 $mp.start}}
                      {do
                         ($cat {$this get_category})
+                        ($adjective {$this get_adjective})
                         {if {!= $cat IGNORED_EVENT}
                            {$banddirector midi_add_preset
                               $cat
-                              {$this get_adjective}
+                              $adjective
                               {beat_to_seconds $mp.start}
+                           }
+                           {if_else {== $mp.val lighting}
+                              {if {&& {type $adjective kDataArray} {> {size $adjective} 0}}
+                                 {dx_update_lightpreset {elem $adjective 0} $mp.start}
+                              }
+                              {dx_update_lightpreset $cat $mp.start}
                            }
                            {set [legacy_presets] TRUE}
                         }

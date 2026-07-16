@@ -1,0 +1,32 @@
+;Venue tracking for Phillips Hue
+
+#define DX_LIGHTING_FILE_PATH
+(
+   {sprint DX_GAMEDATA_ROOT "dx_lighting.txt"}
+)
+
+{func dx_update_lightpreset
+   ($preset $start_beat)
+   {do
+      ; Store both the preset and its start time in seconds
+      {push_back $dx_lightpreset_array
+         {sprintf "%s|%f"
+            {sprint $preset}
+            {beat_to_seconds $start_beat}
+         }
+      }
+   }
+}
+
+#define DX_LIGHTING_WRITE_TO_FILE
+(
+   {do
+      ($current_presets {array})
+      {push_back $current_presets {sprintf "elapsed|%f" {taskmgr seconds}}}
+      ; Write all presets and their start times
+      {foreach $preset $dx_lightpreset_array
+         {push_back $current_presets $preset}
+      }
+      {write_file DX_LIGHTING_FILE_PATH $current_presets}
+   }
+)

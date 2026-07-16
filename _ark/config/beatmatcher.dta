@@ -18,6 +18,9 @@
          }
          ; BAD - catch up bot deployments if someone deployed between beats
          {dx_bot_overdrive_handler}
+         {unless {gamemode in_mode trainer}
+            {thread_task kTaskBeats (script DX_LIGHTING_WRITE_TO_FILE)}
+         }
       }
       {if_else #ifdef HX_WII FALSE #else $stagekit #endif
          {stagekit_left_right kStageSweepLeft_fast kStageSweepRight_fast}
