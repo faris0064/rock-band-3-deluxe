@@ -22,6 +22,14 @@
 (
    {do
       ($current_presets {array})
+      ($current_beat {taskmgr beat})
+
+      ; maybe i couldn't find it but there didn't seem to be a way to get the current song bpm directly?
+      ; this calculates the BPM at the current beat, by subracting (in seconds) the current beat from the next one, then dividing by 60.
+      ($chart_bpm {/ 60.0 {- {beat_to_seconds {+ $current_beat 1.0}} {beat_to_seconds $current_beat}}})
+      
+      {push_back $current_presets {sprintf "bpm|%f" $chart_bpm}}
+      {push_back $current_presets {sprintf "beat|%f" $current_beat}}
       {push_back $current_presets {sprintf "elapsed|%f" {taskmgr seconds}}}
       ; Write all presets and their start times
       {foreach $preset $dx_lightpreset_array
