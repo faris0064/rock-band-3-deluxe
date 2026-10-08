@@ -2171,10 +2171,13 @@
                )
                (midi
                   {if [enabled]
-                     {$banddirector add_symbol_key
-                        lightpreset_keyframe
-                        {$this get_keyframe}
-                        {beat_to_seconds $mp.start}
+                     {do 
+                        {$banddirector add_symbol_key
+                           lightpreset_keyframe
+                           {$this get_keyframe}
+                           {beat_to_seconds $mp.start}
+                        }
+                        {dx_update_lightpreset {$this get_keyframe} $mp.start}
                      }
                   }
                )
@@ -2187,10 +2190,13 @@
                (init {set [enabled] {is_ver_30}})
                (text
                   {if {&& [enabled] {find_elem (next prev first) $mp.val}}
-                     {$banddirector add_symbol_key
-                        lightpreset_keyframe
-                        $mp.val
-                        {beat_to_seconds $mp.start}
+                     { do
+                        {$banddirector add_symbol_key
+                           lightpreset_keyframe
+                           $mp.val
+                           {beat_to_seconds $mp.start}
+                        }
+                        {dx_update_lightpreset $mp.val $mp.start}
                      }
                   }
                )
