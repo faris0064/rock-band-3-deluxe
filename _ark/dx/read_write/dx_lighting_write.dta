@@ -6,13 +6,13 @@
 )
 
 {func dx_update_lightpreset
-   ($preset $start_beat)
+   ($preset $start_frame)
    {do
       ; Store both the preset and its start time in seconds
       {push_back $dx_lightpreset_array
          {sprintf "%s|%f"
             {sprint $preset}
-            {beat_to_seconds $start_beat}
+            {/ $start_frame 30} ; banddirector appears to store it in frames instead of beats
          }
       }
    }

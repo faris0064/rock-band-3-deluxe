@@ -2171,13 +2171,10 @@
                )
                (midi
                   {if [enabled]
-                     {do 
-                        {$banddirector add_symbol_key
-                           lightpreset_keyframe
-                           {$this get_keyframe}
-                           {beat_to_seconds $mp.start}
-                        }
-                        {dx_update_lightpreset {$this get_keyframe} $mp.start}
+                     {$banddirector add_symbol_key
+                        lightpreset_keyframe
+                        {$this get_keyframe}
+                        {beat_to_seconds $mp.start}
                      }
                   }
                )
@@ -2190,13 +2187,10 @@
                (init {set [enabled] {is_ver_30}})
                (text
                   {if {&& [enabled] {find_elem (next prev first) $mp.val}}
-                     { do
-                        {$banddirector add_symbol_key
-                           lightpreset_keyframe
-                           $mp.val
-                           {beat_to_seconds $mp.start}
-                        }
-                        {dx_update_lightpreset $mp.val $mp.start}
+                     {$banddirector add_symbol_key
+                        lightpreset_keyframe
+                        $mp.val
+                        {beat_to_seconds $mp.start}
                      }
                   }
                )
@@ -2228,7 +2222,6 @@
                               {elem $presets 0}
                               {beat_to_seconds $mp.start}
                            }
-                           {dx_update_lightpreset {elem $presets 0} $mp.start}
                         }
                      }
                   }
@@ -2276,18 +2269,11 @@
                      {set $mp.start {max 5 $mp.start}}
                      {do
                         ($cat {$this get_category})
-                        ($adjective {$this get_adjective})
                         {if {!= $cat IGNORED_EVENT}
                            {$banddirector midi_add_preset
                               $cat
-                              $adjective
+                              {$this get_adjective}
                               {beat_to_seconds $mp.start}
-                           }
-                           {if_else {== $mp.val lighting}
-                              {if {&& {type $adjective kDataArray} {> {size $adjective} 0}}
-                                 {dx_update_lightpreset {elem $adjective 0} $mp.start}
-                              }
-                              {dx_update_lightpreset $cat $mp.start}
                            }
                            {set [legacy_presets] TRUE}
                         }
@@ -2721,5 +2707,25 @@
 (finish_loading
    {if $banddirector
       {$banddirector midi_harvest_dircuts}
+
+      {if {$banddirector get propanim}
+         {do
+            ($anim {$banddirector get propanim})
+
+            {$anim foreach_keyframe $banddirector (lightpreset) $frame $value
+               {dx_update_lightpreset
+                  {sprint $value}
+                  $frame
+               }
+            }
+
+            {$anim foreach_keyframe $banddirector (lightpreset_keyframe) $frame $value
+               {dx_update_lightpreset
+                  {sprint $value}
+                  $frame
+               }
+            }
+         }
+      }
    }
 )
